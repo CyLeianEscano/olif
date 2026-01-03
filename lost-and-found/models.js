@@ -18,17 +18,18 @@ const FoundItem = sequelize.define("FoundItem", {
   itemType: { type: DataTypes.STRING, allowNull: false },
   itemColor: { type: DataTypes.STRING, allowNull: false },
   locationFound: { type: DataTypes.STRING, allowNull: false },
-  dateTurnedIn: { type: DataTypes.DATEONLY, allowNull: false },
+  dateTurnedIn: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW },
   foundByName: { type: DataTypes.STRING, allowNull: false },
   stationKept: { type: DataTypes.STRING, allowNull: false },
-  additionalNotes: { type: DataTypes.TEXT }
+  additionalNotes: { type: DataTypes.TEXT },
+  claimed: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false }
 });
 
 const LostItem = sequelize.define("LostItem", {
-  dateReported: { type: DataTypes.DATEONLY, allowNull: false },
+  dateReported: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW },
   itemType: { type: DataTypes.STRING, allowNull: false },
   itemColor: { type: DataTypes.STRING, allowNull: false },
-  locationLost: { type: DataTypes.STRING, allowNull: false },
+  locationLost: { type: DataTypes.STRING, allowNull: true },
   approxLostAt: { type: DataTypes.DATE },
   additionalDescription: { type: DataTypes.TEXT }
 });

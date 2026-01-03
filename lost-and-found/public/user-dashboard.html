@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Campus Lost &amp; Found – User Dashboard</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <div class="card">
+        <div class="card-inner">
+          <header class="app-header">
+            <div class="brand">
+              <div class="brand-logo">LF</div>
+              <div class="brand-text">
+                <div class="brand-title">Campus Lost &amp; Found</div>
+                <div class="brand-subtitle">User dashboard</div>
+              </div>
+            </div>
+            <div class="nav-tabs">
+              <button id="logoutBtn" class="nav-link">
+                <span>Logout</span>
+              </button>
+            </div>
+          </header>
+
+          <main>
+            <h2 class="page-title">Found items &amp; lost report</h2>
+            <p class="page-description">
+              Search recently found items and report something you lost on campus.
+            </p>
+
+            <div class="layout-two-col">
+              <section>
+                <div class="form-card">
+                  <div class="search-bar">
+                    <label class="field-label">Search found items</label>
+                    <input
+                      type="text"
+                      id="searchInput"
+                      class="input"
+                      placeholder="Search items (type, color, location, station)..."
+                    />
+                    <div class="actions-row" style="justify-content:flex-start;margin-top:8px;">
+                      <button id="searchBtn" class="button button-primary" type="button">
+                        Search
+                      </button>
+                      <button id="clearSearchBtn" class="button button-outline" type="button">
+                        Clear
+                      </button>
+                    </div>
+
+                    <div style="margin-top:10px;">
+                      <label class="field-label">Match strictness for suggestions</label>
+                      <select id="matchStrictness" class="select">
+                        <option value="low">Low – more suggestions</option>
+                        <option value="medium" selected>Medium – balanced</option>
+                        <option value="high">High – very similar only</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="summary-card" style="margin-top:16px;">
+                  <div class="summary-title">Recently found items</div>
+                  <div id="foundItems"></div>
+                </div>
+
+                <div class="summary-card" style="margin-top:16px;">
+                  <div class="summary-title">Possible matches for your lost reports</div>
+                  <div id="matchItems"></div>
+                </div>
+              </section>
+
+              <section>
+                <div class="form-card">
+                  <h3 class="page-title" style="font-size:16px;margin-bottom:10px;">
+                    Report a lost item
+                  </h3>
+                  <form id="lostForm" class="form-grid">
+                    <div class="form-grid-full">
+                      <label class="field-label">
+                        Item type <span class="required">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        id="itemType"
+                        class="input"
+                        placeholder="e.g. ID card, wallet, phone"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label class="field-label">
+                        Item color <span class="required">*</span>
+                      </label>
+                      <select class="select" id="itemColor" required>
+                        <option value="">Select color</option>
+                        <option value="Black">Black</option>
+                        <option value="White">White</option>
+                        <option value="Blue">Blue</option>
+                        <option value="Red">Red</option>
+                        <option value="Green">Green</option>
+                        <option value="Yellow">Yellow</option>
+                        <option value="Gray">Gray</option>
+                        <option value="Brown">Brown</option>
+                        <option value="Purple">Purple</option>
+                        <option value="Pink">Pink</option>
+                        <option value="Orange">Orange</option>
+                        <option value="Silver">Silver</option>
+                        <option value="Gold">Gold</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label class="field-label">Location lost</label>
+                      <select class="select" id="locationLost">
+                        <option value="">Select location</option>
+                        <option value="College of Engineering and Architecture">College of Engineering and Architecture</option>
+                        <option value="College of Teacher Education">College of Teacher Education</option>
+                        <option value="College of Arts and Sciences">College of Arts and Sciences</option>
+                        <option value="College of Business and Accountancy">College of Business and Accountancy</option>
+                        <option value="College of Computing and Information Sciences">College of Computing and Information Sciences</option>
+                        <option value="College of Criminal Justice Education">College of Criminal Justice Education</option>
+                        <option value="College of Maritime Studies">College of Maritime Studies</option>
+                        <option value="College of Industrial Technology">College of Industrial Technology</option>
+                        <option value="LHS Laboratory Highschool">LHS Laboratory Highschool</option>
+                        <option value="Pool">Pool</option>
+                        <option value="Library">Library</option>
+                        <option value="Oval">Oval</option>
+                        <option value="Meeting Hall">Meeting Hall</option>
+                        <option value="Covered Court">Covered Court</option>
+                        <option value="Cafeteria near main gate">Cafeteria near main gate</option>
+                        <option value="Cafeteria near CTE">Cafeteria near CTE</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </div>
+
+                    <div class="form-grid-full">
+                      <label class="field-label">Additional description</label>
+                      <textarea
+                        id="additionalDescription"
+                        class="textarea"
+                        placeholder="Brand, markings, unique identifiers..."
+                      ></textarea>
+                    </div>
+
+                    <div class="form-grid-full actions-row">
+                      <button type="submit" class="button button-primary">
+                        Submit report
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </section>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+      if (!currentUser || currentUser.role !== "user") {
+        window.location.href = "/";
+      }
+
+      document.getElementById("logoutBtn").addEventListener("click", () => {
+        localStorage.removeItem("currentUser");
+        window.location.href = "/";
+      });
+
+      let allItems = [];
+      let myLostItems = [];
+
+      async function loadFoundItems() {
+        const res = await fetch("/found-items");
+        allItems = await res.json();
+        renderItems(allItems);
+        computeMatches();
+      }
+
+      async function loadMyLostItems() {
+        try {
+          const res = await fetch(`/my-lost-items?userId=${encodeURIComponent(currentUser.id)}`);
+          if (!res.ok) {
+            const errBody = await res.json().catch(() => ({}));
+            console.error("Failed to load my lost items", res.status, errBody);
+            myLostItems = [];
+          } else {
+            myLostItems = await res.json();
+          }
+          computeMatches();
+        } catch (err) {
+          console.error("Error calling /my-lost-items:", err);
+          myLostItems = [];
+          computeMatches();
+        }
+      }
+
+      function computeMatches() {
+        const container = document.getElementById("matchItems");
+        if (!container) return;
+
+        container.innerHTML = "";
+
+        if (!myLostItems.length || !allItems.length) {
+          container.innerHTML = '<div class="helper-text">No matches yet. Add a lost report or wait for new found items.</div>';
+          return;
+        }
+
+        const strictnessSelect = document.getElementById("matchStrictness");
+        const strictness = strictnessSelect ? strictnessSelect.value : "medium";
+
+        let threshold;
+        switch (strictness) {
+          case "low":
+            threshold = 1;
+            break;
+          case "high":
+            threshold = 5;
+            break;
+          case "medium":
+          default:
+            threshold = 3;
+            break;
+        }
+
+        const matches = [];
+
+        myLostItems.forEach((lost) => {
+          const lostType = (lost.itemType || "").toLowerCase();
+          const lostColor = (lost.itemColor || "").toLowerCase();
+          const lostLocation = (lost.locationLost || "").toLowerCase();
+
+          allItems.forEach((found) => {
+            const foundType = (found.itemType || "").toLowerCase();
+            const foundColor = (found.itemColor || "").toLowerCase();
+            const foundLocation = (found.locationFound || "").toLowerCase();
+            const foundStation = (found.stationKept || "").toLowerCase();
+
+            let score = 0;
+            if (lostType && foundType && lostType === foundType) score += 3;
+            if (lostColor && foundColor && lostColor === foundColor) score += 2;
+            if (lostLocation && (foundLocation.includes(lostLocation) || lostLocation.includes(foundLocation))) {
+              score += 2;
+            }
+            if (lostLocation && foundStation.includes(lostLocation)) {
+              score += 1;
+            }
+
+            if (score >= threshold) {
+              matches.push({ score, lost, found });
+            }
+          });
+        });
+
+        if (!matches.length) {
+          container.innerHTML = '<div class="helper-text">No matches under current strictness. Try lowering strictness.</div>';
+          return;
+        }
+
+        matches.sort((a, b) => b.score - a.score);
+
+        matches.slice(0, 10).forEach(({ score, lost, found }) => {
+          const row = document.createElement("div");
+          row.className = "summary-item";
+
+          const label = document.createElement("span");
+          label.className = "label";
+          label.textContent = `${lost.itemType} (${lost.itemColor}) → ${found.itemType} (${found.itemColor})`;
+
+          const value = document.createElement("span");
+          value.className = "value";
+          value.textContent =
+            `Lost at: ${lost.locationLost || "unknown"} · ` +
+            `Found at: ${found.locationFound || "unknown"} · ` +
+            `Kept at: ${found.stationKept || "unknown"}`;
+
+          row.appendChild(label);
+          row.appendChild(value);
+          container.appendChild(row);
+        });
+      }
+
+      function renderItems(items) {
+        const container = document.getElementById("foundItems");
+        container.innerHTML = "";
+        if (!items.length) {
+          container.innerHTML = '<div class="helper-text">No items found.</div>';
+          return;
+        }
+        items.forEach(item => {
+          const row = document.createElement("div");
+          row.className = "summary-item";
+
+          const label = document.createElement("span");
+          label.className = "label";
+          label.textContent = item.itemType || "Item";
+
+          const value = document.createElement("span");
+          value.className = "value";
+          value.textContent =
+            (item.itemColor ? item.itemColor + " · " : "") +
+            (item.locationFound || "") +
+            (item.stationKept ? " · " + item.stationKept : "");
+
+          row.appendChild(label);
+          row.appendChild(value);
+          container.appendChild(row);
+        });
+      }
+
+      function filterItems(term) {
+        term = term.toLowerCase();
+        return allItems.filter(item => {
+          return (
+            (item.itemType || "").toLowerCase().includes(term) ||
+            (item.itemColor || "").toLowerCase().includes(term) ||
+            (item.locationFound || "").toLowerCase().includes(term) ||
+            (item.stationKept || "").toLowerCase().includes(term)
+          );
+        });
+      }
+
+      document.getElementById("searchBtn").addEventListener("click", () => {
+        const term = document.getElementById("searchInput").value.trim();
+        if (!term) {
+          renderItems(allItems);
+          return;
+        }
+        renderItems(filterItems(term));
+      });
+
+      document.getElementById("clearSearchBtn").addEventListener("click", () => {
+        document.getElementById("searchInput").value = "";
+        renderItems(allItems);
+      });
+
+      const matchStrictnessSelect = document.getElementById("matchStrictness");
+      if (matchStrictnessSelect) {
+        matchStrictnessSelect.addEventListener("change", () => {
+          computeMatches();
+        });
+      }
+
+      loadFoundItems();
+      loadMyLostItems();
+
+      document.getElementById("lostForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const body = {
+          userId: currentUser.id,
+          itemType: document.getElementById("itemType").value,
+          itemColor: document.getElementById("itemColor").value,
+          locationLost: document.getElementById("locationLost").value,
+          additionalDescription: document.getElementById("additionalDescription").value
+        };
+        const res = await fetch("/lost-items", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "X-User-Id": currentUser.id },
+          body: JSON.stringify(body)
+        });
+
+        if (res.ok) {
+          alert("Lost item reported");
+          e.target.reset();
+          loadMyLostItems();
+        } else {
+          const err = await res.json();
+          alert("Error: " + err.error);
+        }
+      });
+    </script>
+  </body>
+</html>
