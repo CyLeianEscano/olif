@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Report Lost Item</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body data-page="lost">
+    <div class="app-shell">
+      <div class="card">
+        <div class="card-inner">
+          <header class="app-header">
+            <div class="brand">
+              <div class="brand-logo">LF</div>
+              <div class="brand-text">
+                <div class="brand-title">Report Lost Item</div>
+                <div class="brand-subtitle">Describe what you lost</div>
+              </div>
+            </div>
+            <nav class="nav-tabs">
+              <a href="/" class="nav-link" data-link-id="home">
+                <span>Home</span>
+              </a>
+              <a href="/report-lost.html" class="nav-link" data-link-id="lost">
+                <span>Report lost</span>
+              </a>
+              <a href="/report-found.html" class="nav-link" data-link-id="found">
+                <span>Turn in item</span>
+              </a>
+              <a href="/admin.html" class="nav-link" data-link-id="admin">
+                <span class="icon">🛡</span>
+                <span>Admin</span>
+              </a>
+            </nav>
+          </header>
+
+          <div class="layout-two-col">
+            <main>
+              <h1 class="page-title">Lost item details</h1>
+              <p class="page-description">
+                Fill in the fields below as accurately as you can. This helps us match your report to items turned in.
+              </p>
+
+              <form id="lost-form" class="form-card">
+                <div class="form-grid">
+                  <div class="form-grid-full">
+                    <label class="field-label">
+                      Your user ID
+                      <span class="required">*</span>
+                    </label>
+                    <input class="input" type="number" name="userId" placeholder="1" value="1" />
+                    <div class="helper-text">For now, enter the numeric user ID (e.g. 1).</div>
+                  </div>
+
+                  <div>
+                    <label class="field-label">
+                      Date reported
+                      <span class="required">*</span>
+                    </label>
+                    <input class="input" type="date" name="dateReported" />
+                  </div>
+
+                  <div>
+                    <label class="field-label">
+                      Item type
+                      <span class="required">*</span>
+                    </label>
+                    <input class="input" type="text" name="itemType" placeholder="smartphone, wallet, ID card" />
+                  </div>
+
+                  <div>
+                    <label class="field-label">
+                      Item color
+                      <span class="required">*</span>
+                    </label>
+                    <select class="select" name="itemColor">
+                      <option value="">Select color</option>
+                      <option>Black</option>
+                      <option>White</option>
+                      <option>Gray</option>
+                      <option>Red</option>
+                      <option>Orange</option>
+                      <option>Yellow</option>
+                      <option>Green</option>
+                      <option>Blue</option>
+                      <option>Purple</option>
+                      <option>Brown</option>
+                      <option>Pink</option>
+                      <option>Beige</option>
+                      <option>Gold</option>
+                      <option>Silver</option>
+                      <option>Maroon</option>
+                      <option>Navy</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="field-label">
+                      Location lost
+                      <span class="required">*</span>
+                    </label>
+                    <select class="select" name="locationLost">
+                      <option value="">Select location</option>
+                      <option>CAS</option>
+                      <option>CBA</option>
+                      <option>CCJE</option>
+                      <option>CEA</option>
+                      <option>CIT</option>
+                      <option>CMS</option>
+                      <option>CCS</option>
+                      <option>CTE</option>
+                      <option>COT</option>
+                      <option>LHS</option>
+                      <option>Pool</option>
+                      <option>Meeting Hall</option>
+                      <option>Covered Court</option>
+                      <option>Oval</option>
+                      <option>Library</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="field-label">Approximate time/date lost</label>
+                    <input class="input" type="datetime-local" name="approxLostAt" />
+                  </div>
+
+                  <div class="form-grid-full">
+                    <label class="field-label">Additional description</label>
+                    <textarea class="textarea" name="additionalDescription" placeholder="Case color, brand, unique marks, etc."></textarea>
+                  </div>
+                </div>
+
+                <div class="actions-row">
+                  <button type="reset" class="button button-outline">Clear</button>
+                  <button type="submit" class="button button-primary">
+                    <span>Submit lost report</span>
+                  </button>
+                </div>
+              </form>
+            </main>
+            <aside>
+              <div id="admin-summary"></div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const today = new Date().toISOString().slice(0, 10);
+      const dateInput = document.querySelector('input[name="dateReported"]');
+      if (dateInput) dateInput.value = today;
+    </script>
+    <script src="/js/app.js"></script>
+  </body>
+</html>

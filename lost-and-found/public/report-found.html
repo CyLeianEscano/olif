@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Turn In Found Item</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body data-page="found">
+    <div class="app-shell">
+      <div class="card">
+        <div class="card-inner">
+          <header class="app-header">
+            <div class="brand">
+              <div class="brand-logo">LF</div>
+              <div class="brand-text">
+                <div class="brand-title">Turn In Found Item</div>
+                <div class="brand-subtitle">Record an item turned over</div>
+              </div>
+            </div>
+            <nav class="nav-tabs">
+              <a href="/" class="nav-link" data-link-id="home">
+                <span>Home</span>
+              </a>
+              <a href="/report-lost.html" class="nav-link" data-link-id="lost">
+                <span>Report lost</span>
+              </a>
+              <a href="/report-found.html" class="nav-link" data-link-id="found">
+                <span>Turn in item</span>
+              </a>
+              <a href="/admin.html" class="nav-link" data-link-id="admin">
+                <span class="icon">🛡</span>
+                <span>Admin</span>
+              </a>
+            </nav>
+          </header>
+
+          <div class="layout-two-col">
+            <main>
+              <h1 class="page-title">Found item details</h1>
+              <p class="page-description">
+                This form is for staff or students turning in an item to a gate station. Name must be entered manually.
+              </p>
+
+              <form id="found-form" class="form-card">
+                <div class="form-grid">
+                  <div>
+                    <label class="field-label">
+                      Item type
+                      <span class="required">*</span>
+                    </label>
+                    <input class="input" type="text" name="itemType" placeholder="smartphone, wallet, ID card" />
+                  </div>
+
+                  <div>
+                    <label class="field-label">
+                      Item color
+                      <span class="required">*</span>
+                    </label>
+                    <select class="select" name="itemColor">
+                      <option value="">Select color</option>
+                      <option>Black</option>
+                      <option>White</option>
+                      <option>Gray</option>
+                      <option>Red</option>
+                      <option>Orange</option>
+                      <option>Yellow</option>
+                      <option>Green</option>
+                      <option>Blue</option>
+                      <option>Purple</option>
+                      <option>Brown</option>
+                      <option>Pink</option>
+                      <option>Beige</option>
+                      <option>Gold</option>
+                      <option>Silver</option>
+                      <option>Maroon</option>
+                      <option>Navy</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="field-label">
+                      Location found
+                      <span class="required">*</span>
+                    </label>
+                    <select class="select" name="locationFound">
+                      <option value="">Select location</option>
+                      <option>CAS</option>
+                      <option>CBA</option>
+                      <option>CCJE</option>
+                      <option>CEA</option>
+                      <option>CIT</option>
+                      <option>CMS</option>
+                      <option>CCS</option>
+                      <option>CTE</option>
+                      <option>COT</option>
+                      <option>LHS</option>
+                      <option>Pool</option>
+                      <option>Meeting Hall</option>
+                      <option>Covered Court</option>
+                      <option>Oval</option>
+                      <option>Library</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="field-label">
+                      Date turned in
+                      <span class="required">*</span>
+                    </label>
+                    <input class="input" type="date" name="dateTurnedIn" />
+                  </div>
+
+                  <div>
+                    <label class="field-label">
+                      Full name of person who found it
+                      <span class="required">*</span>
+                    </label>
+                    <input class="input" type="text" name="foundByName" placeholder="Complete name" />
+                  </div>
+
+                  <div>
+                    <label class="field-label">
+                      Station kept
+                      <span class="required">*</span>
+                    </label>
+                    <select class="select" name="stationKept">
+                      <option value="">Select gate</option>
+                      <option>Main Gate</option>
+                      <option>Gate 1</option>
+                      <option>Gate 2</option>
+                      <option>Gate 3</option>
+                    </select>
+                  </div>
+
+                  <div class="form-grid-full">
+                    <label class="field-label">
+                      Admin ID recording this
+                      <span class="required">*</span>
+                    </label>
+                    <input class="input" type="number" name="adminId" placeholder="1" value="1" />
+                    <div class="helper-text">Enter the numeric admin ID (for now).</div>
+                  </div>
+
+                  <div class="form-grid-full">
+                    <label class="field-label">Additional notes</label>
+                    <textarea class="textarea" name="additionalNotes" placeholder="Brand, model, special marks, etc."></textarea>
+                  </div>
+                </div>
+
+                <div class="actions-row">
+                  <button type="reset" class="button button-outline">Clear</button>
+                  <button type="submit" class="button button-primary">
+                    <span>Save found item</span>
+                  </button>
+                </div>
+              </form>
+            </main>
+            <aside>
+              <div id="admin-summary"></div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const today = new Date().toISOString().slice(0, 10);
+      const dateInput = document.querySelector('input[name="dateTurnedIn"]');
+      if (dateInput) dateInput.value = today;
+    </script>
+    <script src="/js/app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Campus Lost & Found</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body data-page="home">
+    <div class="app-shell">
+      <div class="card">
+        <div class="card-inner">
+          <header class="app-header">
+            <div class="brand">
+              <div class="brand-logo">LF</div>
+              <div class="brand-text">
+                <div class="brand-title">Campus Lost &amp; Found</div>
+                <div class="brand-subtitle">Keep items moving back to owners</div>
+              </div>
+            </div>
+            <nav class="nav-tabs">
+              <a href="/" class="nav-link" data-link-id="home">
+                <span>Home</span>
+              </a>
+              <a href="/report-lost.html" class="nav-link" data-link-id="lost">
+                <span>Report lost</span>
+              </a>
+              <a href="/report-found.html" class="nav-link" data-link-id="found">
+                <span>Turn in item</span>
+              </a>
+              <a href="/admin.html" class="nav-link" data-link-id="admin">
+                <span>Admin</span>
+              </a>
+            </nav>
+          </header>
+
+          <div class="layout-two-col">
+            <main>
+              <h1 class="page-title">Welcome</h1>
+              <p class="page-description">
+                Choose what you want to do today: report something you lost, turn in an item you found,
+                or review activity if you are an admin.
+              </p>
+              <div class="form-card">
+                <p class="page-description">
+                  Lost something recently? Start with a lost item report so we can match it to turned‑in items by
+                  type, color, location, and date.
+                </p>
+              </div>
+            </main>
+            <aside>
+              <div id="admin-summary"></div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="/js/app.js"></script>
+  </body>
+</html>
